@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formulaire de Satisfaction — Formation IA Pratique | RobotsMali</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F5F3EE;
+    --surface: #FFFFFF;
+    --primary: #1A3A5C;
+    --accent: #E8512A;
+    --accent2: #F0A500;
+    --text: #1C1C1A;
+    --muted: #6B6860;
+    --border: #DDD9D0;
+    --radius: 12px;
+    --selected-bg: #EAF1F8;
+    --selected-border: #1A3A5C;
+    --selected-text: #1A3A5C;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 0 0 60px;
+  }
+
+  /* Header */
+  .header {
+    background: var(--primary);
+    color: white;
+    padding: 40px 24px 36px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(232,81,42,0.18);
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: -40px;
+    width: 140px; height: 140px;
+    border-radius: 50%;
+    background: rgba(240,165,0,0.12);
+  }
+  .logo-area {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 1;
+  }
+  .logo-icon {
+    width: 44px; height: 44px;
+    background: var(--accent);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px; color: white; font-weight: 400;
+  }
+  .logo-text {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: white;
+    letter-spacing: 0.02em;
+  }
+  .header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(22px, 5vw, 32px);
+    font-weight: 400;
+    line-height: 1.25;
+    color: white;
+    margin-bottom: 10px;
+    position: relative; z-index: 1;
+  }
+  .header p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.7);
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.6;
+    position: relative; z-index: 1;
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(232,81,42,0.2);
+    border: 1px solid rgba(232,81,42,0.4);
+    color: #FFB59A;
+    font-size: 12px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    position: relative; z-index: 1;
+  }
+
+  /* Progress */
+  .progress-bar-wrap {
+    background: var(--border);
+    height: 3px;
+  }
+  .progress-bar-fill {
+    height: 3px;
+    background: var(--accent);
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+
+  /* Container */
+  .container {
+    max-width: 680px;
+    margin: 32px auto 0;
+    padding: 0 16px;
+  }
+
+  /* Sections */
+  .section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    margin-bottom: 20px;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 22px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-num {
+    width: 28px; height: 28px;
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 600;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--primary);
+    letter-spacing: 0.01em;
+  }
+
+  /* Questions */
+  .question {
+    margin-bottom: 22px;
+  }
+  .question:last-child { margin-bottom: 0; }
+  .q-label {
+    font-size: 14px;
+    color: var(--text);
+    font-weight: 500;
+    margin-bottom: 10px;
+    line-height: 1.5;
+    display: block;
+  }
+  .q-note {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 5px;
+  }
+
+  /* Two column grid */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 500px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  /* Text inputs */
+  input[type=text], select, textarea {
+    width: 100%;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    appearance: none;
+  }
+  input[type=text]:focus, select:focus, textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(26,58,92,0.08);
+  }
+  textarea { min-height: 90px; resize: vertical; line-height: 1.6; }
+  select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B6860' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px; cursor: pointer; }
+
+  /* Stars */
+  .star-group {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 4px;
+  }
+  .star-group input { display: none; }
+  .star-group label {
+    font-size: 28px;
+    cursor: pointer;
+    color: var(--border);
+    transition: color 0.1s, transform 0.1s;
+    line-height: 1;
+  }
+  .star-group label:hover,
+  .star-group label:hover ~ label,
+  .star-group input:checked ~ label,
+  .star-group input:checked + label { color: var(--accent2); }
+  .star-group label:hover { transform: scale(1.15); }
+
+  /* Likert / choice pills */
+  .pill-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .pill-group input { display: none; }
+  .pill-group label {
+    font-size: 13px;
+    padding: 7px 16px;
+    border: 1px solid var(--border);
+    border-radius: 30px;
+    cursor: pointer;
+    color: var(--muted);
+    background: var(--bg);
+    transition: all 0.15s;
+    user-select: none;
+    font-weight: 400;
+  }
+  .pill-group label:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: var(--selected-bg);
+  }
+  .pill-group input:checked + label {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+    font-weight: 500;
+  }
+
+  /* Submit */
+  .submit-area { text-align: center; margin-top: 28px; }
+  .submit-btn {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 15px 48px;
+    font-size: 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+    box-shadow: 0 4px 20px rgba(232,81,42,0.25);
+  }
+  .submit-btn:hover { background: #C93E1A; box-shadow: 0 6px 28px rgba(232,81,42,0.35); }
+  .submit-btn:active { transform: scale(0.98); }
+  .anon-note {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .anon-note::before {
+    content: '';
+    display: inline-block;
+    width: 14px; height: 14px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='3' y='7' width='10' height='8' rx='2' stroke='%236B6860' stroke-width='1.2' fill='none'/%3E%3Cpath d='M5.5 7V5a2.5 2.5 0 015 0v2' stroke='%236B6860' stroke-width='1.2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-size: contain;
+  }
+
+  /* Success */
+  #success-screen {
+    display: none;
+    text-align: center;
+    padding: 60px 24px;
+  }
+  .success-icon {
+    width: 72px; height: 72px;
+    background: #EAF3DE;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 24px;
+    font-size: 32px;
+  }
+  #success-screen h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    color: var(--primary);
+    margin-bottom: 12px;
+    font-weight: 400;
+  }
+  #success-screen p {
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.6;
+    max-width: 380px;
+    margin: 0 auto;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 32px 24px 16px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .footer a { color: var(--primary); text-decoration: none; }
+
+  @media print {
+    body { background: white; }
+    .header { background: #1A3A5C !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .submit-area, .progress-bar-wrap { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar-wrap">
+  <div class="progress-bar-fill" id="progressBar"></div>
+</div>
+
+<div class="header">
+  <div class="logo-area">
+    <div class="logo-text">RobotsMali</div>
+  </div>
+  <div class="badge">Formation · Intelligence Artificielle Pratique</div>
+  <h1>Formulaire de Satisfaction</h1>
+  <p>Vos retours nous aident à améliorer nos formations. Ce formulaire est anonyme et prend moins de 5 minutes.</p>
+</div>
+
+<div class="container" id="formArea">
+
+  <!-- Section 1 : Infos générales -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <div class="section-title">Informations générales <span style="font-weight:300;color:#999;font-size:13px;">(optionnel)</span></div>
+    </div>
+    <div class="grid-2">
+      <div class="question">
+        <label class="q-label">Structure / Organisation</label>
+        <input type="text" placeholder="Votre organisation">
+      </div>
+    </div>
+    <div class="question" style="margin-top:14px;">
+      <label class="q-label">Votre fonction</label>
+      <select>
+        <option value="">— Sélectionner votre poste —</option>
+        <option>Cadre dirigeant / Directeur</option>
+        <option>Responsable de projet</option>
+        <option>Chargé de programme</option>
+        <option>Technicien / Expert</option>
+        <option>Consultant</option>
+        <option>Autre</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Section 2 : Appréciation globale -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <div class="section-title">Appréciation globale</div>
+    </div>
+    <div class="question">
+      <label class="q-label">Note globale de la formation</label>
+      <div class="star-group">
+        <input type="radio" name="global" id="g5" value="5"><label for="g5">★</label>
+        <input type="radio" name="global" id="g4" value="4"><label for="g4">★</label>
+        <input type="radio" name="global" id="g3" value="3"><label for="g3">★</label>
+        <input type="radio" name="global" id="g2" value="2"><label for="g2">★</label>
+        <input type="radio" name="global" id="g1" value="1"><label for="g1">★</label>
+      </div>
+      <p class="q-note">1 étoile = Insuffisant &nbsp;·&nbsp; 5 étoiles = Excellent</p>
+    </div>
+    <div class="question">
+      <label class="q-label">La formation a répondu à vos attentes initiales</label>
+      <div class="pill-group">
+        <input type="radio" name="attentes" id="at1" value="1"><label for="at1">Pas du tout</label>
+        <input type="radio" name="attentes" id="at2" value="2"><label for="at2">Peu</label>
+        <input type="radio" name="attentes" id="at3" value="3"><label for="at3">Partiellement</label>
+        <input type="radio" name="attentes" id="at4" value="4"><label for="at4">Largement</label>
+        <input type="radio" name="attentes" id="at5" value="5"><label for="at5">Totalement</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 3 : Contenu -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <div class="section-title">Contenu pédagogique</div>
+    </div>
+    <div class="question">
+      <label class="q-label">Clarté et qualité des contenus présentés</label>
+      <div class="pill-group">
+        <input type="radio" name="clarte" id="cl1" value="1"><label for="cl1">Insuffisant</label>
+        <input type="radio" name="clarte" id="cl2" value="2"><label for="cl2">Passable</label>
+        <input type="radio" name="clarte" id="cl3" value="3"><label for="cl3">Bien</label>
+        <input type="radio" name="clarte" id="cl4" value="4"><label for="cl4">Très bien</label>
+        <input type="radio" name="clarte" id="cl5" value="5"><label for="cl5">Excellent</label>
+      </div>
+    </div>
+    <div class="question">
+      <label class="q-label">Pertinence des exemples et cas pratiques sectoriels</label>
+      <div class="pill-group">
+        <input type="radio" name="exemples" id="ex1" value="1"><label for="ex1">Insuffisant</label>
+        <input type="radio" name="exemples" id="ex2" value="2"><label for="ex2">Passable</label>
+        <input type="radio" name="exemples" id="ex3" value="3"><label for="ex3">Bien</label>
+        <input type="radio" name="exemples" id="ex4" value="4"><label for="ex4">Très bien</label>
+        <input type="radio" name="exemples" id="ex5" value="5"><label for="ex5">Excellent</label>
+      </div>
+    </div>
+    <div class="question">
+      <label class="q-label">Équilibre théorie / pratique (80% pratique)</label>
+      <div class="pill-group">
+        <input type="radio" name="equi" id="eq1" value="1"><label for="eq1">Trop théorique</label>
+        <input type="radio" name="equi" id="eq2" value="2"><label for="eq2">Plutôt théorique</label>
+        <input type="radio" name="equi" id="eq3" value="3"><label for="eq3">Équilibré</label>
+        <input type="radio" name="equi" id="eq4" value="4"><label for="eq4">Plutôt pratique</label>
+        <input type="radio" name="equi" id="eq5" value="5"><label for="eq5">Très pratique</label>
+      </div>
+    </div>
+    <div class="question">
+      <label class="q-label">Les outils IA présentés sont applicables à votre travail quotidien</label>
+      <div class="pill-group">
+        <input type="radio" name="appli" id="ap1" value="1"><label for="ap1">Pas du tout</label>
+        <input type="radio" name="appli" id="ap2" value="2"><label for="ap2">Peu</label>
+        <input type="radio" name="appli" id="ap3" value="3"><label for="ap3">Partiellement</label>
+        <input type="radio" name="appli" id="ap4" value="4"><label for="ap4">Largement</label>
+        <input type="radio" name="appli" id="ap5" value="5"><label for="ap5">Totalement</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 4 : Formateurs -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <div class="section-title">Formateurs et animation</div>
+    </div>
+    <div class="question">
+      <label class="q-label">Compétence et expertise du / des formateur(s)</label>
+      <div class="pill-group">
+        <input type="radio" name="expert" id="xp1" value="1"><label for="xp1">Insuffisant</label>
+        <input type="radio" name="expert" id="xp2" value="2"><label for="xp2">Passable</label>
+        <input type="radio" name="expert" id="xp3" value="3"><label for="xp3">Bien</label>
+        <input type="radio" name="expert" id="xp4" value="4"><label for="xp4">Très bien</label>
+        <input type="radio" name="expert" id="xp5" value="5"><label for="xp5">Excellent</label>
+      </div>
+    </div>
+    <div class="question">
+      <label class="q-label">Qualité de l'accompagnement personnalisé</label>
+      <div class="pill-group">
+        <input type="radio" name="accomp" id="ac1" value="1"><label for="ac1">Insuffisant</label>
+        <input type="radio" name="accomp" id="ac2" value="2"><label for="ac2">Passable</label>
+        <input type="radio" name="accomp" id="ac3" value="3"><label for="ac3">Bien</label>
+        <input type="radio" name="accomp" id="ac4" value="4"><label for="ac4">Très bien</label>
+        <input type="radio" name="accomp" id="ac5" value="5"><label for="ac5">Excellent</label>
+      </div>
+    </div>
+    <div class="question">
+      <label class="q-label">Dynamisme et interactivité des sessions</label>
+      <div class="pill-group">
+        <input type="radio" name="dyna" id="dy1" value="1"><label for="dy1">Insuffisant</label>
+        <input type="radio" name="dyna" id="dy2" value="2"><label for="dy2">Passable</label>
+        <input type="radio" name="dyna" id="dy3" value="3"><label for="dy3">Bien</label>
+        <input type="radio" name="dyna" id="dy4" value="4"><label for="dy4">Très bien</label>
+        <input type="radio" name="dyna" id="dy5" value="5"><label for="dy5">Excellent</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 5 : Logistique -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">5</div>
+      <div class="section-title">Organisation et logistique</div>
+    </div>
+    <div class="question">
+      <label class="q-label">Conditions matérielles (salle, équipements, connexion internet)</label>
+      <div class="pill-group">
+        <input type="radio" name="mater" id="mt1" value="1"><label for="mt1">Insuffisant</label>
+        <input type="radio" name="mater" id="mt2" value="2"><label for="mt2">Passable</label>
+        <input type="radio" name="mater" id="mt3" value="3"><label for="mt3">Bien</label>
+        <input type="radio" name="mater" id="mt4" value="4"><label for="mt4">Très bien</label>
+        <input type="radio" name="mater" id="mt5" value="5"><label for="mt5">Excellent</label>
+      </div>
+    </div>
+    <div class="question">
+      <label class="q-label">Durée de la formation (20 heures)</label>
+      <div class="pill-group">
+        <input type="radio" name="duree" id="du1" value="1"><label for="du1">Trop courte</label>
+        <input type="radio" name="duree" id="du2" value="2"><label for="du2">Un peu courte</label>
+        <input type="radio" name="duree" id="du3" value="3"><label for="du3">Adaptée</label>
+        <input type="radio" name="duree" id="du4" value="4"><label for="du4">Un peu longue</label>
+        <input type="radio" name="duree" id="du5" value="5"><label for="du5">Trop longue</label>
+      </div>
+    </div>
+    <div class="question">
+      <label class="q-label">Qualité des supports pédagogiques (guides, tutoriels, présentations)</label>
+      <div class="pill-group">
+        <input type="radio" name="supp" id="sp1" value="1"><label for="sp1">Insuffisant</label>
+        <input type="radio" name="supp" id="sp2" value="2"><label for="sp2">Passable</label>
+        <input type="radio" name="supp" id="sp3" value="3"><label for="sp3">Bien</label>
+        <input type="radio" name="supp" id="sp4" value="4"><label for="sp4">Très bien</label>
+        <input type="radio" name="supp" id="sp5" value="5"><label for="sp5">Excellent</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 6 : Impact -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">6</div>
+      <div class="section-title">Impact et perspectives</div>
+    </div>
+    <div class="question">
+      <label class="q-label">Cette formation a renforcé votre culture numérique et IA</label>
+      <div class="pill-group">
+        <input type="radio" name="cult" id="cu1" value="1"><label for="cu1">Pas du tout</label>
+        <input type="radio" name="cult" id="cu2" value="2"><label for="cu2">Peu</label>
+        <input type="radio" name="cult" id="cu3" value="3"><label for="cu3">Partiellement</label>
+        <input type="radio" name="cult" id="cu4" value="4"><label for="cu4">Largement</label>
+        <input type="radio" name="cult" id="cu5" value="5"><label for="cu5">Totalement</label>
+      </div>
+    </div>
+    <div class="question">
+      <label class="q-label">Recommanderiez-vous cette formation à un collègue ?</label>
+      <div class="pill-group">
+        <input type="radio" name="reco" id="r1" value="1"><label for="r1">Certainement non</label>
+        <input type="radio" name="reco" id="r2" value="2"><label for="r2">Probablement non</label>
+        <input type="radio" name="reco" id="r3" value="3"><label for="r3">Peut-être</label>
+        <input type="radio" name="reco" id="r4" value="4"><label for="r4">Probablement oui</label>
+        <input type="radio" name="reco" id="r5" value="5"><label for="r5">Certainement oui</label>
+      </div>
+    </div>
+    <div class="question">
+      <label class="q-label">Envisagez-vous d'intégrer des outils IA dans votre pratique professionnelle ?</label>
+      <div class="pill-group">
+        <input type="radio" name="integ" id="it1" value="maintenant"><label for="it1">Oui, dès maintenant</label>
+        <input type="radio" name="integ" id="it2" value="bientot"><label for="it2">Oui, bientôt</label>
+        <input type="radio" name="integ" id="it3" value="incertain"><label for="it3">Incertain(e)</label>
+        <input type="radio" name="integ" id="it4" value="non"><label for="it4">Non</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 7 : Commentaires -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">7</div>
+      <div class="section-title">Commentaires libres</div>
+    </div>
+    <div class="question">
+      <label class="q-label">Ce que vous avez le plus apprécié dans cette formation</label>
+      <textarea placeholder="Partagez ce qui vous a le plus marqué..."></textarea>
+    </div>
+    <div class="question">
+      <label class="q-label">Ce qui pourrait être amélioré</label>
+      <textarea placeholder="Vos suggestions pour améliorer la prochaine session..."></textarea>
+    </div>
+    <div class="question">
+      <label class="q-label">Thèmes ou outils que vous souhaiteriez approfondir lors d'une prochaine formation</label>
+      <textarea placeholder="Ex : automatisation avancée, IA dans mon secteur, prompting, ChatGPT..."></textarea>
+    </div>
+    <div class="question">
+      <label class="q-label">Commentaire général</label>
+      <textarea placeholder="Tout autre retour que vous souhaitez partager avec l'équipe RobotsMali..."></textarea>
+    </div>
+  </div>
+
+  <div class="submit-area">
+    <button class="submit-btn" onclick="handleSubmit()">Envoyer mes réponses</button>
+    <p class="anon-note">Formulaire anonyme — vos réponses sont confidentielles</p>
+  </div>
+
+  <div id="success-screen">
+    <div class="success-icon">✓</div>
+    <h2>Merci pour vos retours !</h2>
+    <p>Vos réponses ont bien été enregistrées. L'équipe RobotsMali prend en compte chaque avis pour améliorer la qualité de ses formations.</p>
+    <p style="margin-top:16px; font-size:13px; color:#999;">— RobotsMali, Bko-Mali (Sebenikɔrɔ)</p>
+  </div>
+
+</div>
+
+<div class="footer">
+  <p><strong>RobotsMali</strong> — Robotique et Intelligence Artificielle</p>
+  <p style="margin-top:4px;"><a href="mailto:info@robotsmali.org">info@robotsmali.org</a> &nbsp;·&nbsp; +223 74 48 33 76 / 73 65 55 01 &nbsp;·&nbsp; <a href="https://www.robotsmali.org" target="_blank">www.robotsmali.org</a></p>
+</div>
+
+<script>
+  // Progress bar based on answered questions
+  function updateProgress() {
+    const radios = document.querySelectorAll('input[type=radio]');
+    const groups = new Set([...radios].map(r => r.name));
+    let answered = 0;
+    groups.forEach(name => {
+      if (document.querySelector('input[name="' + name + '"]:checked')) answered++;
+    });
+    const pct = Math.round((answered / groups.size) * 100);
+    document.getElementById('progressBar').style.width = pct + '%';
+  }
+  document.querySelectorAll('input[type=radio]').forEach(r => r.addEventListener('change', updateProgress));
+
+  function handleSubmit() {
+
+const data = {
+  nom: document.querySelector('input[placeholder="Optionnel — anonyme"]').value,
+  organisation: document.querySelectorAll('input[type=text]')[1].value,
+  fonction: document.querySelector('select').value,
+  global: getValue("global"),
+  attentes: getValue("attentes"),
+  clarte: getValue("clarte"),
+  exemples: getValue("exemples"),
+  equi: getValue("equi"),
+  appli: getValue("appli"),
+  expert: getValue("expert"),
+  accomp: getValue("accomp"),
+  dyna: getValue("dyna"),
+  mater: getValue("mater"),
+  duree: getValue("duree"),
+  supp: getValue("supp"),
+  cult: getValue("cult"),
+  reco: getValue("reco"),
+  integ: getValue("integ"),
+  points_forts: document.querySelectorAll("textarea")[0].value,
+  ameliorations: document.querySelectorAll("textarea")[1].value,
+  themes: document.querySelectorAll("textarea")[2].value,
+  commentaire: document.querySelectorAll("textarea")[3].value
+};
+
+fetch("https://script.google.com/macros/s/AKfycbzs7BDjqWOMsZiCoj00i06IqVSZNBt8ICu8YLxc11JuKe8fcMbuTdTSaoyYPN3unbY7/exec", {
+  method: "POST",
+  body: JSON.stringify(data)
+})
+.then(res => res.json())
+.then(response => {
+
+  document.querySelector('.submit-area').style.display = 'none';
+
+  document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+
+  document.getElementById('success-screen').style.display = 'block';
+
+  document.getElementById('progressBar').style.width = '100%';
+
+});
+
+}
+
+function getValue(name){
+let el = document.querySelector('input[name="'+name+'"]:checked');
+return el ? el.value : "";
+}
+</script>
+</body>
+</html>
