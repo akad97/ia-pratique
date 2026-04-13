@@ -625,11 +625,11 @@
   }
   document.querySelectorAll('input[type=radio]').forEach(r => r.addEventListener('change', updateProgress));
 
-  function handleSubmit() {
+ function handleSubmit() {
 
 const data = {
-  nom: document.querySelector('input[placeholder="Optionnel — anonyme"]').value,
-  organisation: document.querySelectorAll('input[type=text]')[1].value,
+  nom: "",
+  organisation: document.querySelectorAll('input[type=text]')[0].value,
   fonction: document.querySelector('select').value,
   global: getValue("global"),
   attentes: getValue("attentes"),
@@ -652,7 +652,7 @@ const data = {
   commentaire: document.querySelectorAll("textarea")[3].value
 };
 
-fetch("https://script.google.com/macros/s/AKfycbwOdRl17v8YXyvZ9bNIktgKjxHgnT7H_ixcoYAOsf0-8XERH3ZD1waNsFCF7JzHzZB-/exec", {
+fetch("https://script.google.com/macros/s/AKfycbwubylcj9RZuB087YkwgGK2FCcA7dZgo560jF7aKZ6DdX7Qvq6RSpobVxHVZBxFr_VK/exec", {
   method: "POST",
   body: JSON.stringify(data)
 })
